@@ -1,0 +1,43 @@
+apply plugin: 'application'
+
+dependencies {
+    implementation project(':fat32lib')
+}
+
+group = 'com.android.tools.build'
+archivesBaseName = 'jobb'
+//version = rootProject.ext.baseVersion
+
+// configure the manifest of the sdkJar task
+
+//task jobbStartScripts(type: CreateStartScripts) {
+//    classpath = project.getTasks().getAt(JavaPlugin.JAR_TASK_NAME).getOutputs().getFiles().plus(
+///            project.getConfigurations().getByName('runtimeClasspath'))
+//    outputDir new File(project.getBuildDir(), 'scripts')
+//
+//    description 'Creates OS specific scripts to start jobb'
+//    mainClass.set('com.android.jobb.Main')
+//    applicationName = 'jobb'
+//}
+
+
+//sdk {
+//    common(mac, linux) {
+//        item(new File(buildDir, 'scripts/jobb')) {
+//            into 'bin'
+//            builtBy 'jobbStartScripts'
+//        }
+//    }
+//    windows {
+//        item(new File(buildDir, 'scripts/jobb.bat')) {
+//            into 'bin'
+//            builtBy 'jobbStartScripts'
+//        }
+ //   }
+//}
+
+// turn off strict javadoc
+
+jar {
+  from 'NOTICE'
+}
