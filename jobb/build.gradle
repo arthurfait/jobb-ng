@@ -1,4 +1,5 @@
 apply plugin: 'application'
+apply plugin: 'com.github.johnrengelman.shadow'
 
 dependencies {
     implementation project(':fat32lib')
@@ -9,6 +10,15 @@ archivesBaseName = 'jobb'
 //version = rootProject.ext.baseVersion
 
 // configure the manifest of the sdkJar task
+
+
+application {
+    mainClassName = "com.android.jobb.Main" // for shadow plugin
+}
+//
+//manifest {
+//    attributes "Main-Class": "com.android.jobb.Main"
+//}
 
 //task jobbStartScripts(type: CreateStartScripts) {
 //    classpath = project.getTasks().getAt(JavaPlugin.JAR_TASK_NAME).getOutputs().getFiles().plus(
