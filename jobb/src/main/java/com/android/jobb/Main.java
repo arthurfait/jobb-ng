@@ -78,6 +78,7 @@ public class Main {
     static boolean sVerboseMode;
     static String sPackageName;
     static int sPackageVersion = -1;
+    static int sOverrideSectorSize = -1;
     static byte[] sSalt;
     static boolean sOverlay;
     static int sFlags;
@@ -177,6 +178,8 @@ public class Main {
                     sPackageVersion = Integer.parseInt(args[++i]);
                 } else if (curArg.equals("-ov")) {
                     sFlags |= ObbFile.OBB_OVERLAY;
+                } else if (curArg.equals("-ss")) {
+                    sOverrideSectorSize = Integer.parseInt(args[++i]);
                 } else if (curArg.equals("-dump")) {
                     sInputFile = args[++i];
                 } else if (curArg.equals("-salt")) {
@@ -376,12 +379,12 @@ public class Main {
             final File f = new File(sDirectory);
             
             long fileSize = getTotalFileSize(f, 0);
-            fileSize = getTotalFileSize(f, BLOCK_SIZE*SuperFloppyFormatter.clusterSizeFromSize(fileSize, BLOCK_SIZE));
+            fileSize = getTotalFileSize(f, BLOCK_SIZE * clusterSizeFromSize(fileSize));
             if (sVerboseMode) {
                 System.out.println("Total Files: " + fileSize);
             }
             long numSectors = fileSize / BLOCK_SIZE;
-            long clusterSize = SuperFloppyFormatter.clusterSizeFromSize(fileSize, BLOCK_SIZE);
+            long clusterSize = clusterSizeFromSize(fileSize);
             long fatOverhead = 2*numSectors/clusterSize*4;
             fatOverhead += clusterSize*BLOCK_SIZE - fatOverhead % (clusterSize*BLOCK_SIZE);
             fatOverhead += 2*clusterSize; //start at second cluster
@@ -603,5 +606,13 @@ public class Main {
         } else {
             fp.processFile(dir);
         }
+    }
+
+    private static int clusterSizeFromSize(long fileSize) {
+        if (sOverrideSectorSize > 0) {
+            return sOverrideSectorSize;
+        }
+        return SuperFloppyFormatter.clusterSizeFromSize(fileSize, BLOCK_SIZE);
+
     }
 }
